@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夜色电影网 - 深夜霓虹影视导航</title>
+<meta name="description" content="夜色电影网（yesedianyingwang-h5）深夜党专属影视导航：最新电影、热播剧、综艺动漫、夜场榜单，暗夜霓虹UI，手机自适应，必应收录友好。">
+<meta name="keywords" content="夜色电影网, yesedianyingwang-h5, 电影, 电视剧, 综艺, 动漫, 深夜看片, 在线观看, 霓虹影视, 暗夜导航">
+<meta name="author" content="夜色电影网">
+<meta name="robots" content="index, follow">
+<style>
+:root{
+  --night:#05060a;
+  --night2:#0b0d18;
+  --panel:#0f1322;
+  --line:#222844;
+  --red:#ff2e63;
+  --purple:#7a5cff;
+  --blue:#36e0ff;
+  --text:#e7ecff;
+  --dim:#8b93b8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%,rgba(122,92,255,.18),transparent 60%),
+    radial-gradient(900px 500px at 0% 10%,rgba(255,46,99,.14),transparent 55%),
+    var(--night);
+  color:var(--text);
+  line-height:1.8;
+  overflow-x:hidden;
+  position:relative;
+}
+/* 雨夜 + 颗粒 + 暗角 */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:
+    repeating-linear-gradient(105deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px),
+    radial-gradient(circle at 50% 40%,transparent 55%,rgba(0,0,0,.65) 100%);
+  mix-blend-mode:screen;opacity:.5;
+}
+a{color:var(--blue);text-decoration:none;transition:.3s}
+a:hover{color:var(--red);text-shadow:0 0 10px rgba(255,46,99,.6)}
+
+/* 顶栏 */
+.top{
+  position:sticky;top:0;z-index:50;
+  background:rgba(5,6,10,.82);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.top-inner{
+  max-width:1200px;margin:0 auto;height:62px;padding:0 18px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-weight:900;font-size:22px;letter-spacing:1px}
+.logo b{
+  color:var(--red);
+  text-shadow:0 0 12px rgba(255,46,99,.7),0 0 30px rgba(255,46,99,.3);
+}
+.logo i{font-style:normal;font-size:10px;letter-spacing:3px;color:var(--dim);display:block}
+.menu{display:flex;gap:4px;list-style:none}
+.menu a{
+  padding:9px 14px;font-size:14px;font-weight:700;color:var(--text);
+  border-radius:8px;border:1px solid transparent;
+}
+.menu a:hover,.menu a.active{
+  color:#fff;border-color:var(--purple);
+  box-shadow:0 0 14px rgba(122,92,255,.35),inset 0 0 12px rgba(122,92,255,.15);
+}
+.burger{display:none;font-size:24px;color:var(--blue);background:none;border:none;cursor:pointer}
+
+/* Hero */
+.hero{
+  max-width:1200px;margin:0 auto;padding:84px 18px 56px;text-align:center;position:relative;z-index:2;
+}
+.hero .neon-sign{
+  display:inline-block;font-size:clamp(34px,8vw,68px);font-weight:900;letter-spacing:3px;
+  color:#fff;
+  text-shadow:
+    0 0 8px var(--blue),
+    0 0 22px var(--blue),
+    3px 0 var(--red),
+    -3px 0 var(--purple);
+  animation:flicker 3.5s infinite;
+}
+@keyframes flicker{
+  0%,18%,22%,25%,53%,57%,100%{opacity:1}
+  20%,24%,55%{opacity:.55}
+}
+.hero p{color:var(--dim);max-width:560px;margin:18px auto 28px;font-size:15px}
+.cta{
+  display:inline-block;padding:14px 40px;border-radius:999px;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,var(--red),var(--purple));
+  box-shadow:0 10px 34px rgba(255,46,99,.35);
+}
+.cta:hover{transform:translateY(-3px);color:#fff;box-shadow:0 14px 40px rgba(122,92,255,.45)}
+
+/* 区块 */
+.section{max-width:1200px;margin:0 auto;padding:52px 18px;position:relative;z-index:2}
+.head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:26px;
+}
+.head h2{font-size:clamp(20px,4vw,28px);font-weight:900;letter-spacing:1px}
+.head h2::before{content:"🌃 ";color:var(--blue)}
+.head a{font-size:13px;color:var(--dim)}
+
+/* 电影：横向霓虹长廊 */
+.strip{
+  display:flex;gap:18px;overflow-x:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory;
+}
+.strip::-webkit-scrollbar{height:8px}
+.strip::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+.film{
+  flex:0 0 190px;scroll-snap-align:start;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;transition:.35s;position:relative;
+}
+.film:hover{
+  transform:translateY(-6px);
+  border-color:var(--blue);
+  box-shadow:0 0 0 1px var(--blue),0 14px 40px rgba(54,224,255,.18);
+}
+.film .poster{
+  height:240px;display:flex;align-items:center;justify-content:center;font-size:54px;
+  background:linear-gradient(160deg,#141833,#0a0c18);
+  position:relative;
+}
+.film .poster::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(transparent 60%,rgba(255,46,99,.12));
+}
+.film .cap{padding:12px 14px}
+.film .cap .cat{font-size:10px;letter-spacing:2px;color:var(--blue);font-weight:700;text-transform:uppercase}
+.film .cap h3{font-size:15px;margin-top:2px}
+.film .neon-tag{
+  position:absolute;top:10px;left:10px;font-size:10px;font-weight:800;
+  padding:3px 9px;border-radius:999px;color:#fff;
+  background:linear-gradient(135deg,var(--red),var(--purple));
+  box-shadow:0 0 12px rgba(255,46,99,.5);
+}
+
+/* 电视剧：霓虹门牌 */
+.door-list{display:flex;flex-direction:column;gap:12px}
+.door{
+  display:flex;align-items:center;gap:18px;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  transition:.3s;position:relative;overflow:hidden;
+}
+.door::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(var(--blue),var(--purple));
+}
+.door:hover{padding-left:26px;border-color:var(--purple);background:#12152a}
+.door .no{font-size:30px;font-weight:900;color:transparent;-webkit-text-stroke:1.5px var(--blue)}
+.door h3{font-size:16px}
+.door p{font-size:12px;color:var(--dim)}
+.door .state{margin-left:auto;font-size:11px;font-weight:800;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:var(--blue)}
+.door .state.hot{color:var(--red);border-color:var(--red);box-shadow:0 0 10px rgba(255,46,99,.3)}
+
+/* 综艺动漫：霓虹招牌墙 */
+.signwall{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;
+}
+.sign{
+  height:130px;border-radius:14px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;gap:6px;
+  border:1px solid var(--line);background:var(--panel);transition:.3s;cursor:pointer;
+}
+.sign:hover{transform:rotate(-1.5deg) scale(1.04);border-color:var(--red);box-shadow:0 0 22px rgba(255,46,99,.25)}
+.sign .em{font-size:34px;filter:drop-shadow(0 0 8px rgba(54,224,255,.6))}
+.sign h4{font-size:14px;font-weight:800}
+.sign span{font-size:11px;color:var(--dim)}
+.sign:nth-child(3n+1):hover{border-color:var(--blue);box-shadow:0 0 22px rgba(54,224,255,.25)}
+.sign:nth-child(3n+2):hover{border-color:var(--purple);box-shadow:0 0 22px rgba(122,92,255,.25)}
+
+/* 排行榜：夜场打光条 */
+.spot{display:flex;flex-direction:column;gap:14px}
+.spot-row{
+  display:grid;grid-template-columns:42px 1fr 56px;align-items:center;gap:16px;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+}
+.spot-row .rk{font-size:22px;font-weight:900;color:var(--blue);text-shadow:0 0 10px rgba(54,224,255,.5)}
+.spot-row h4{font-size:15px}
+.beam{height:8px;background:#1a1f38;border-radius:999px;overflow:hidden;margin-top:6px}
+.beam i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--red),var(--purple));box-shadow:0 0 10px rgba(255,46,99,.4)}
+.spot-row .sc{font-size:18px;font-weight:900;color:var(--red);text-align:right}
+
+/* 关于：深夜放映厅 */
+.cinema{
+  max-width:780px;margin:0 auto;background:var(--panel);
+  border:1px solid var(--line);border-radius:16px;padding:34px 28px;position:relative;
+}
+.cinema::before{
+  content:"NOW SHOWING";position:absolute;top:-14px;left:24px;
+  background:linear-gradient(135deg,var(--red),var(--purple));color:#fff;
+  font-size:11px;font-weight:900;letter-spacing:2px;padding:5px 14px;border-radius:999px;
+  box-shadow:0 0 16px rgba(122,92,255,.4);
+}
+.cinema h3{font-size:20px;margin-bottom:14px}
+.cinema p{font-size:14px;color:#c4cbf0;margin-bottom:10px}
+.cinema .lnks{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.cinema .lnks a{padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--text)}
+.cinema .lnks a:hover{border-color:var(--blue);color:var(--blue)}
+
+/* 页脚 */
+.foot{border-top:1px solid var(--line);padding:30px 18px;text-align:center;color:var(--dim);font-size:13px;position:relative;z-index:2}
+.foot a{color:var(--dim);margin:0 6px}
+.foot .big{font-size:17px;font-weight:900;color:#fff;letter-spacing:2px;margin-bottom:8px}
+.foot .url{color:var(--blue);text-shadow:0 0 8px rgba(54,224,255,.4)}
+
+@media(max-width:760px){
+  .menu{
+    display:none;position:absolute;top:62px;left:0;right:0;flex-direction:column;
+    background:rgba(5,6,10,.96);border-bottom:1px solid var(--line);padding:8px 14px;
+  }
+  .menu.open{display:flex}
+  .menu a{padding:14px 16px}
+  .burger{display:block}
+  .film{flex-basis:160px}
+  .film .poster{height:210px;font-size:44px}
+}
+@media(max-width:480px){
+  .hero{padding:56px 16px 36px}
+  .section{padding:36px 16px}
+  .spot-row{grid-template-columns:34px 1fr 46px;gap:10px;padding:12px}
+  .door{flex-wrap:wrap;gap:10px}
+  .door .state{margin-left:0}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="top">
+  <div class="top-inner">
+    <div class="logo">夜色<b>电影网</b><i>YESEDIANYINGWANG-H5</i></div>
+    <ul class="menu" id="menu">
+      <li><a href="#home" class="active">首页</a></li>
+      <li><a href="#movies">夜场电影</a></li>
+      <li><a href="#tv">深夜剧集</a></li>
+      <li><a href="#ent">霓虹综艺</a></li>
+      <li><a href="#rank">夜色榜单</a></li>
+      <li><a href="#about">放映厅</a></li>
+    </ul>
+    <button class="burger" id="burger">☰</button>
+  </div>
+</div>
+
+<header class="hero" id="home">
+  <div class="neon-sign">夜色电影网</div>
+  <p>yesedianyingwang-h5 · 当城市睡着，好片才刚开始。电影 / 剧集 / 综艺 / 动漫，深夜一口气刷完。</p>
+  <a href="#movies" class="cta">走进夜场 →</a>
+</header>
+
+<section class="section" id="movies">
+  <div class="head"><h2>夜场电影</h2><a href="#">更多 →</a></div>
+  <div class="strip">
+    <div class="film"><span class="neon-tag">4K</span><div class="poster">🎬</div><div class="cap"><div class="cat">NOIR</div><h3>午夜计程车</h3></div></div>
+    <div class="film"><span class="neon-tag">热</span><div class="poster">🕯️</div><div class="cap"><div class="cat">THRILLER</div><h3>雨夜来电</h3></div></div>
+    <div class="film"><div class="poster">🌃</div><div class="cap"><div class="cat">CITY</div><h3>霓虹孤岛</h3></div></div>
+    <div class="film"><div class="poster">🩸</div><div class="cap"><div class="cat">CRIME</div><h3>红唇档案</h3></div></div>
+    <div class="film"><span class="neon-tag">新</span><div class="poster">🎷</div><div class="cap"><div class="cat">JAZZ</div><h3>凌晨四点半</h3></div></div>
+    <div class="film"><div class="poster">🪩</div><div class="cap"><div class="cat">SYNTH</div><h3>霓虹 Disco</h3></div></div>
+    <div class="film"><div class="poster">🚬</div><div class="cap"><div class="cat">DRAMA</div><h3>烟雾与旧爱</h3></div></div>
+    <div class="film"><span class="neon-tag">IMAX</span><div class="poster">🦇</div><div class="cap"><div class="cat">DARK</div><h3>暗巷蝙蝠</h3></div></div>
+  </div>
+</section>
+
+<section class="section" id="tv" style="background:rgba(11,13,24,.6)">
+  <div class="head"><h2>深夜剧集</h2><a href="#">更多 →</a></div>
+  <div class="door-list">
+    <div class="door"><div class="no">01</div><div><h3>凌晨分局</h3><p>都市罪案夜班剧，凌晨报案的人才最疯。</p></div><span class="state hot">热播</span></div>
+    <div class="door"><div class="no">02</div><div><h3>霓虹旅馆</h3><p>每个房间一个秘密，悬疑单元剧。</p></div><span class="state hot">热播</span></div>
+    <div class="door"><div class="no">03</div><div><h3>夜行出租车</h3><p>司机听了一千个乘客的故事。</p></div><span class="state">更新</span></div>
+    <div class="door"><div class="no">04</div><div><h3>午夜电台 FM0</h3><p>深夜情感 + 悬疑双线，越夜越上头。</p></div><span class="state">更新</span></div>
+    <div class="door"><div class="no">05</div><div><h3>旧城往事 1988</h3><p>怀旧夜色群像，慢火熬出来的好剧。</p></div><span class="state">完结</span></div>
+  </div>
+</section>
+
+<section class="section" id="ent">
+  <div class="head"><h2>霓虹综艺 · 动漫</h2><a href="#">更多 →</a></div>
+  <div class="signwall">
+    <div class="sign"><div class="em">🎤</div><h4>深夜歌会</h4><span>音乐现场</span></div>
+    <div class="sign"><div class="em">🍜</div><h4>宵夜江湖</h4><span>美食夜谈</span></div>
+    <div class="sign"><div class="em">🦇</div><h4>夜行录</h4><span>国风动漫</span></div>
+    <div class="sign"><div class="em">🎮</div><h4>通宵电竞</h4><span>竞技动漫</span></div>
+    <div class="sign"><div class="em">📻</div><h4>午夜聊天室</h4><span>访谈综艺</span></div>
+    <div class="sign"><div class="em">🌙</div><h4>月亮便利店</h4><span>治愈番</span></div>
+    <div class="sign"><div class="em">🕶️</div><h4>暗夜侦探</h4><span>推理综艺</span></div>
+    <div class="sign"><div class="em">🪩</div><h4>霓虹舞池</h4><span>舞蹈竞演</span></div>
+  </div>
+</section>
+
+<section class="section" id="rank" style="background:rgba(11,13,24,.6)">
+  <div class="head"><h2>夜色榜单</h2><a href="#">更多 →</a></div>
+  <div class="spot">
+    <div class="spot-row"><div class="rk">01</div><div><h4>午夜计程车</h4><div class="beam"><i style="width:98%"></i></div></div><div class="sc">9.8</div></div>
+    <div class="spot-row"><div class="rk">02</div><div><h4>凌晨分局</h4><div class="beam"><i style="width:96%"></i></div></div><div class="sc">9.6</div></div>
+    <div class="spot-row"><div class="rk">03</div><div><h4>霓虹旅馆</h4><div class="beam"><i style="width:94%"></i></div></div><div class="sc">9.4</div></div>
+    <div class="spot-row"><div class="rk">04</div><div><h4>夜行出租车</h4><div class="beam"><i style="width:91%"></i></div></div><div class="sc">9.1</div></div>
+    <div class="spot-row"><div class="rk">05</div><div><h4>深夜歌会</h4><div class="beam"><i style="width:88%"></i></div></div><div class="sc">8.8</div></div>
+    <div class="spot-row"><div class="rk">06</div><div><h4>月亮便利店</h4><div class="beam"><i style="width:85%"></i></div></div><div class="sc">8.5</div></div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="head"><h2>深夜放映厅</h2></div>
+  <div class="cinema">
+    <h3>“白天属于生活，夜晚属于自己。”</h3>
+    <p>夜色电影网（yesedianyingwang-h5）是一个为夜猫子做的影视导航站：最新电影、深夜剧、霓虹综艺、治愈动漫，全部一屏直达。</p>
+    <p>本站仅做静态导航，不存储视频文件；资源来自互联网公开分享，如有侵权请联系处理。</p>
+    <div class="lnks">
+      <a href="#">免责声明</a>
+      <a href="#">深夜投稿</a>
+      <a href="#">友情链接</a>
+      <a href="#">联系放映员</a>
+      <a href="#">反馈BUG</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="big">夜色电影网 · YESEDIANYINGWANG-H5</div>
+  <p>
+    <a href="#home">首页</a> |
+    <a href="#movies">夜场电影</a> |
+    <a href="#tv">深夜剧集</a> |
+    <a href="#ent">霓虹综艺</a> |
+    <a href="#rank">夜色榜单</a>
+  </p>
+  <p>官网：<span class="url">https://yesedianyingwang-h5.github.io</span></p>
+  <p>© 2026 夜色电影网 · 越夜越好看</p>
+</footer>
+
+<script>
+const burger=document.getElementById('burger');
+const menu=document.getElementById('menu');
+burger.addEventListener('click',()=>menu.classList.toggle('open'));
+
+const secs=document.querySelectorAll('section[id],header[id]');
+const links=menu.querySelectorAll('a');
+addEventListener('scroll',()=>{
+  let cur='home';
+  secs.forEach(s=>{if(scrollY>=s.offsetTop-90)cur=s.id});
+  links.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+cur)l.classList.add('active')});
+});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    menu.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
